@@ -317,7 +317,7 @@ async function sendPasswordReset(e) {
   setMessage('resetEmailMessage', 'Ana aika lambar tabbatarwa...');
 
   try {
-    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: 'https://naskid98.github.io/LIFETIME-EARNING-STAGING/' });
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: https://naskid98.github.io/LIFETIME-EARNING-STAGING/ });
 
     if (error) throw error;
 
@@ -1488,7 +1488,7 @@ async function registerUser(e){
       username,
       referral_code:referralCode
     },
-    emailRedirectTo:'https://naskid98.github.io/LIFETIME-EARNING-STAGING/'
+    emailRedirectTo:https://naskid98.github.io/LIFETIME-EARNING-STAGING/
   }
 });
     if(data.session){currentUser=data.user;await loadProfile();showView('dashboard');}
