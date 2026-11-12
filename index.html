@@ -2136,9 +2136,10 @@ async function loadReferralQualificationTasks(){
     .in('task_key',keys);
   if(error){message.textContent='Ba a iya ɗauko tasks na referral ba: '+error.message;return;}
   const byKey=Object.fromEntries((rows||[]).map(row=>[row.task_key,row]));
+  const missingReferralKeys=[];
   for(const item of REFERRAL_QUALIFICATION_TASKS){
     const row=byKey[item.key];
-    if(!row){message.textContent='An rasa task mai maɓalli '+item.key+'. A duba Supabase kafin a ci gaba.';continue;}
+    if(!row){missingReferralKeys.push(item.key);continue;}
     document.getElementById(item.titleId).value=row.title||'';
     document.getElementById(item.descriptionId).value=row.description||'';
     document.getElementById(item.pointsId).value=Number(row.reward_points||0);
@@ -2152,6 +2153,11 @@ async function loadReferralQualificationTasks(){
       if(titleInput)titleInput.value=translated.title||'';
       if(descriptionInput)descriptionInput.value=translated.description||'';
     }
+  }
+  if(missingReferralKeys.length){
+    message.dataset.messageKey='';
+    message.textContent='An rasa referral task(s): '+missingReferralKeys.join(', ')+'. Cika bayanansu a nan sannan ka danna Ajiye Tasks 3 na Referral domin ƙirƙirar su.';
+    return;
   }
   const inactive=REFERRAL_QUALIFICATION_TASKS.filter(item=>byKey[item.key]&&!byKey[item.key].is_active);
   message.dataset.messageKey=inactive.length?'referralTaskInactiveWarning':'referralTasksLoaded';
@@ -2186,11 +2192,20 @@ async function saveReferralQualificationTasks(event){
       if(title.length<2||description.length<2||!Number.isSafeInteger(reward)||reward<1||reward>1000000){
         throw new Error('Ka duba sunan, umarni da Points na kowane task.');
       }
+      const taskUpdate={title,description,translations,reward_points:reward,updated_at:new Date().toISOString()};
       const {data,error}=await supabaseClient.from('tasks')
-        .update({title,description,translations,reward_points:reward,updated_at:new Date().toISOString()})
+        .update(taskUpdate)
         .eq('task_key',item.key).select('task_key').maybeSingle();
       if(error)throw error;
-      if(!data)throw new Error('Ba a samu task '+item.key+' a database ba.');
+      if(!data){
+        // The required referral task may be missing from Staging. Create it with
+        // its canonical key; never generate a random key for qualification tasks.
+        const {data:created,error:createError}=await supabaseClient.from('tasks')
+          .insert({task_key:item.key,...taskUpdate,is_active:true,created_by:currentUser?.id||null})
+          .select('task_key').maybeSingle();
+        if(createError)throw createError;
+        if(!created)throw new Error('Ba a iya ƙirƙirar task '+item.key+' a database ba.');
+      }
       referralTaskTranslationsCache[item.key]=translations;
     }
     message.dataset.messageKey='referralTasksSaved';
