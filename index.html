@@ -192,6 +192,7 @@ html[dir="rtl"] body{direction:rtl;text-align:right}html[dir="rtl"] input,html[d
 <div class="stat"><span data-admin-key="totalWithdrawals">Total Withdrawals</span><strong id="adminTotalWithdrawals">—</strong></div>
 <div class="stat"><span data-admin-key="pendingWithdrawals">Pending Withdrawals</span><strong id="adminPendingWithdrawals">—</strong></div>
 </div>
+<details class="admin-tool-group" id="adminTaskManagerGroup"><summary>✓ Task Manager & Task History</summary><div class="admin-tool-content">
 <h3 id="adminTaskHeading" data-admin-key="taskManager">Task Manager</h3>
 <h3 id="referralQualificationManager" data-admin-key="referralCommission">🎯 Referral Commission — Tasks 3 na dole</h3>
 <p data-admin-key="referralDesc">Waɗannan tasks uku ne tsarin referral yake dubawa. Kada a canza maɓallan su (task keys) ko a dakatar da su. Za ka iya gyara suna, umarni da Points.</p>
@@ -227,20 +228,7 @@ html[dir="rtl"] body{direction:rtl;text-align:right}html[dir="rtl"] input,html[d
 <div id="referralTasksAdminMessage" class="noticebox" role="status">Ana ɗauko tasks uku na referral...</div>
 </form>
 
-<h3 id="adminNewsHeading" data-admin-key="announcements">📰 Sanarwa / Newsletter</h3>
-<form id="adminCreateNewsletterForm" onsubmit="createNewsletter(event)" style="max-width:650px;margin:12px 0 22px">
-  <label class="field"><span data-admin-key="newsletterTitleLabel">Taken sanarwa (Hausa)</span><input id="newsletterTitle" maxlength="160" required></label>
-  <label class="field"><span data-admin-key="newsletterBodyLabel">Saƙon sanarwa (Hausa)</span><textarea id="newsletterBody" maxlength="5000" required rows="4" style="width:100%;padding:13px 14px;border:1px solid #d9e4da;border-radius:11px;background:#fbfdfb"></textarea></label>
-  <details style="margin:12px 0"><summary data-admin-key="translationsHeading" style="cursor:pointer;font-weight:800">Fassarorin rubutun (ba dole ba)</summary><p class="empty-note" data-admin-key="translationFallback">Idan babu fassara, za a nuna asalin rubutun Hausa.</p>
-    <label class="field"><span data-admin-key="translationEn">English</span><input id="newsletterTitleEn" maxlength="160" placeholder="English title"></label><textarea id="newsletterBodyEn" maxlength="5000" rows="3" placeholder="English message" style="width:100%;padding:13px;border:1px solid #d9e4da;border-radius:11px"></textarea>
-    <label class="field"><span data-admin-key="translationFr">Français</span><input id="newsletterTitleFr" maxlength="160" placeholder="Titre en français"></label><textarea id="newsletterBodyFr" maxlength="5000" rows="3" placeholder="Message en français" style="width:100%;padding:13px;border:1px solid #d9e4da;border-radius:11px"></textarea>
-    <label class="field"><span data-admin-key="translationAr">العربية</span><input id="newsletterTitleAr" maxlength="160" placeholder="العنوان بالعربية"></label><textarea id="newsletterBodyAr" maxlength="5000" rows="3" placeholder="نص الإعلان بالعربية" style="width:100%;padding:13px;border:1px solid #d9e4da;border-radius:11px"></textarea>
-  </details>
-  <label class="field"><span data-admin-key="newsletterExpiry">Lokacin ƙarewar sanarwa (ba dole ba)</span><input id="newsletterExpiry" type="datetime-local"></label>
-  <button class="btn btn-green" id="createNewsletterButton" type="submit" data-admin-key="publishAnnouncement">Wallafa sanarwa</button>
-  <div id="adminNewsletterMessage" class="noticebox" role="status"></div>
-</form>
-<div id="adminNewslettersList">Ana ɗauko sanarwa...</div>
+
 <h4 data-admin-key="publishedTasksHeading">Tasks da aka riga aka wallafa</h4>
 <div id="adminTasksList">Ana ɗauko Tasks...</div>
 
@@ -280,8 +268,30 @@ html[dir="rtl"] body{direction:rtl;text-align:right}html[dir="rtl"] input,html[d
   <div id="adminTaskSubmissions">Ana ɗauko submissions...</div>
   <div id="adminTaskHistoryPagination" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px"></div>
 </details>
+</div></details>
+<details class="admin-tool-group" id="adminAnnouncementsGroup"><summary>📰 Announcements / Newsletter</summary><div class="admin-tool-content">
+<h3 id="adminNewsHeading" data-admin-key="announcements">📰 Sanarwa / Newsletter</h3>
+<form id="adminCreateNewsletterForm" onsubmit="createNewsletter(event)" style="max-width:650px;margin:12px 0 22px">
+  <label class="field"><span data-admin-key="newsletterTitleLabel">Taken sanarwa (Hausa)</span><input id="newsletterTitle" maxlength="160" required></label>
+  <label class="field"><span data-admin-key="newsletterBodyLabel">Saƙon sanarwa (Hausa)</span><textarea id="newsletterBody" maxlength="5000" required rows="4" style="width:100%;padding:13px 14px;border:1px solid #d9e4da;border-radius:11px;background:#fbfdfb"></textarea></label>
+  <details style="margin:12px 0"><summary data-admin-key="translationsHeading" style="cursor:pointer;font-weight:800">Fassarorin rubutun (ba dole ba)</summary><p class="empty-note" data-admin-key="translationFallback">Idan babu fassara, za a nuna asalin rubutun Hausa.</p>
+    <label class="field"><span data-admin-key="translationEn">English</span><input id="newsletterTitleEn" maxlength="160" placeholder="English title"></label><textarea id="newsletterBodyEn" maxlength="5000" rows="3" placeholder="English message" style="width:100%;padding:13px;border:1px solid #d9e4da;border-radius:11px"></textarea>
+    <label class="field"><span data-admin-key="translationFr">Français</span><input id="newsletterTitleFr" maxlength="160" placeholder="Titre en français"></label><textarea id="newsletterBodyFr" maxlength="5000" rows="3" placeholder="Message en français" style="width:100%;padding:13px;border:1px solid #d9e4da;border-radius:11px"></textarea>
+    <label class="field"><span data-admin-key="translationAr">العربية</span><input id="newsletterTitleAr" maxlength="160" placeholder="العنوان بالعربية"></label><textarea id="newsletterBodyAr" maxlength="5000" rows="3" placeholder="نص الإعلان بالعربية" style="width:100%;padding:13px;border:1px solid #d9e4da;border-radius:11px"></textarea>
+  </details>
+  <label class="field"><span data-admin-key="newsletterExpiry">Lokacin ƙarewar sanarwa (ba dole ba)</span><input id="newsletterExpiry" type="datetime-local"></label>
+  <button class="btn btn-green" id="createNewsletterButton" type="submit" data-admin-key="publishAnnouncement">Wallafa sanarwa</button>
+  <div id="adminNewsletterMessage" class="noticebox" role="status"></div>
+</form>
+<div id="adminNewslettersList">Ana ɗauko sanarwa...</div>
+</div></details>
+
+<details class="admin-tool-group" id="adminWithdrawalManagementGroup"><summary>💳 Withdrawal Management</summary><div class="admin-tool-content">
 <h3 id="adminWithdrawalHeading" style="margin-top:22px" data-admin-key="withdrawalManagement">Withdrawal Management</h3><div id="adminWithdrawals">Ana duba izinin admin...</div>
+</div></details>
+<details class="admin-tool-group" id="adminUserManagementGroup"><summary>👥 User Management</summary><div class="admin-tool-content">
 <h3 id="adminUsersHeading" style="margin-top:22px" data-admin-key="userManagement">Users Management</h3><p class="empty-note">Jerin masu amfani da points dinsu. Kada a raba bayanan sirri.</p><div id="adminUsers">Ana ɗauko masu amfani...</div>
+</div></details>
 <hr style="margin:25px 0;border:0;border-top:1px solid var(--line)">
 <details class="admin-tool-group" id="adminAdvertiserManagementGroup"><summary>📢 Advertiser Management</summary><div class="admin-tool-content">
 <details class="admin-tool-subgroup"><summary>Ad Packages & Manual Payment Settings</summary><div>
@@ -1409,7 +1419,7 @@ function showView(id) {
     window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
-  const appViews = ['dashboard', 'tasksView', 'referralView', 'walletView', 'newsletterView', 'accountView', 'adminView', 'advertiserView', 'supportView'];
+  const appViews = ['dashboard', 'tasksView', 'referralView', 'walletView', 'newsletterView', 'accountView', 'adminView', 'advertiserView'];
   const nav = document.getElementById('dashboardBottomNav');
 
   if (nav) nav.hidden = !appViews.includes(id);
@@ -1513,7 +1523,7 @@ async function startPasswordChange(){
     if(box)box.textContent='An aika hanyar tabbatarwa zuwa '+currentUser.email+'. Duba Inbox ko Spam, sannan ka bi umarnin email.';
   }catch(err){if(box)box.textContent='Ba a iya aika hanyar canza kalmar sirri ba: '+err.message;}
 }
-function scrollToAdminSection(id){const target=document.getElementById(id);if(target)target.scrollIntoView({behavior:'smooth',block:'start'});}
+function scrollToAdminSection(id){const target=document.getElementById(id);if(!target)return;let parent=target.parentElement;while(parent){if(parent.tagName==='DETAILS')parent.open=true;parent=parent.parentElement;}target.scrollIntoView({behavior:'smooth',block:'start'});}
 
 async function syncAdminNavigation(){
   const button=document.getElementById('adminNavButton');
