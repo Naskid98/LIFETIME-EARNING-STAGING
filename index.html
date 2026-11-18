@@ -2116,7 +2116,14 @@ async function loadAvailableTasks(){
   const visible=available.filter(t=>!alreadySubmitted.has(t.task_key)).sort((a,b)=>Number(requiredReferralKeys.has(b.task_key))-Number(requiredReferralKeys.has(a.task_key)));
   if(!visible.length){target.textContent='Babu sabon Task a yanzu. Ka sake dubawa daga baya.';await loadTaskSubmissions();return;}
   const language=localStorage.getItem('appLanguage')||'ha';
-  target.innerHTML=visible.map(t=>{const isRequired=requiredReferralKeys.has(t.task_key);const title=localizedContent(t,'title',language);const description=localizedContent(t,'description',language);return `<div class="listrow" style="align-items:flex-start"><div style="min-width:0;flex:1"><b>${escapeHtml(title)}</b>${isRequired?'<small class="tag">Dole domin Referral Commission</small>':''}<small>${escapeHtml(description)}</small><small class="tag">${Number(t.reward_points)} Points</small>${t.expires_at?`<small>Wa’adi: ${new Date(t.expires_at).toLocaleString(appDateLocale())}</small>`:''}</div><button class="btn btn-soft" data-task-key="${escapeHtml(t.task_key)}" data-task-description="${escapeHtml(description)}" onclick="completeTask(this,'${escapeHtml(t.task_key)}')">${taskProofT('submit')}</button></div>`;}).join('');
+  target.innerHTML=visible.map(t=>{
+    const isRequired=requiredReferralKeys.has(t.task_key);
+    const title=localizedContent(t,'title',language);
+    const description=localizedContent(t,'description',language);
+    const noScreenshot=t.task_key.startsWith('gwada_shafin_profile_')||t.task_key.startsWith('gwada_shafin_reffaral_');
+    const screenshotInput=noScreenshot?'':`<label class="task-proof-upload" style="display:block;margin:10px 0;font-size:13px">${taskProofT('attachScreenshot')} <input type="file" data-task-proof-file accept="image/jpeg,image/png,image/webp" style="display:block;max-width:100%;margin-top:5px"></label>`;
+    return `<div class="listrow" style="align-items:flex-start"><div style="min-width:0;flex:1"><b>${escapeHtml(title)}</b>${isRequired?'<small class="tag">Dole domin Referral Commission</small>':''}<small>${escapeHtml(description)}</small><small class="tag">${Number(t.reward_points)} Points</small>${t.expires_at?`<small>Wa’adi: ${new Date(t.expires_at).toLocaleString(appDateLocale())}</small>`:''}${screenshotInput}</div><button class="btn btn-soft" data-task-key="${escapeHtml(t.task_key)}" data-task-description="${escapeHtml(description)}" onclick="completeTask(this,'${escapeHtml(t.task_key)}')">${taskProofT('submit')}</button></div>`;
+  }).join('');
   await loadTaskSubmissions();
 }
 async function loadTaskSubmissions(){
@@ -2137,22 +2144,45 @@ async function loadTaskSubmissions(){
   fr:{submit:'Envoyer la preuve',sending:'Envoi en cours...',login:'Veuillez vous connecter d’abord.',defaultPrompt:'Expliquez comment vous avez terminé cette tâche.',videoPrompt:'Écrivez au moins 10 mots tirés de la vidéo :',proofPrompt:'Saisissez une preuve d’au moins 10 caractères :',videoTooShort:'Cette tâche exige au moins 10 mots tirés de la vidéo.',proofTooShort:'Votre preuve est trop courte. Saisissez au moins 10 caractères.',success:'Votre tâche a été envoyée. Un administrateur vérifiera la preuve avant l’attribution des points.',failed:'Échec de l’envoi de la tâche :'},
   ar:{submit:'إرسال الإثبات',sending:'جارٍ الإرسال...',login:'يرجى تسجيل الدخول أولاً.',defaultPrompt:'اشرح كيف أكملت هذه المهمة.',videoPrompt:'اكتب عشر كلمات على الأقل من الفيديو:',proofPrompt:'أدخل إثباتاً لا يقل عن 10 أحرف:',videoTooShort:'تتطلب هذه المهمة كتابة عشر كلمات على الأقل من الفيديو.',proofTooShort:'الإثبات قصير جداً. أدخل عشرة أحرف على الأقل.',success:'تم إرسال مهمتك. سيراجع المشرف الإثبات قبل إضافة النقاط.',failed:'فشل إرسال المهمة:'}
 };
+Object.assign(taskProofTranslations,{
+  ha:{attachScreenshot:'Haɗa hoton shaida (zaɓi ne)',imageTooLarge:'Hoton ya wuce 5MB.',invalidImage:'JPG, PNG ko WEBP kawai ake karɓa.',proofTooLong:'Hujja tare da hoton ta wuce iyakar haruffa 1000.'},
+  en:{attachScreenshot:'Attach screenshot (optional)',imageTooLarge:'Image exceeds 5MB.',invalidImage:'Only JPG, PNG or WEBP images are accepted.',proofTooLong:'Proof and screenshot reference exceed the 1,000-character limit.'},
+  fr:{attachScreenshot:'Joindre une capture (facultatif)',imageTooLarge:'L’image dépasse 5 Mo.',invalidImage:'Seules les images JPG, PNG ou WEBP sont acceptées.',proofTooLong:'La preuve et la référence de l’image dépassent 1 000 caractères.'},
+  ar:{attachScreenshot:'إرفاق لقطة شاشة (اختياري)',imageTooLarge:'حجم الصورة يتجاوز 5 ميغابايت.',invalidImage:'يُقبل فقط JPG أو PNG أو WEBP.',proofTooLong:'تجاوز الإثبات ومرجع الصورة حد 1000 حرف.'}
+});
+
 function taskProofT(key){const lang=localStorage.getItem('appLanguage')||'ha';return (taskProofTranslations[lang]||taskProofTranslations.ha)[key]||taskProofTranslations.ha[key];}
 async function completeTask(btn,taskKey){
   if(!currentUser){setMessage('dashboardMessage',taskProofT('login'));return;}
   const description=btn?.dataset?.taskDescription||taskProofT('defaultPrompt');
   const needsTenWords=taskKey.startsWith('ka_duba_sabon_update_na_yau_');
-  const proof=prompt(description+'\n\n'+(needsTenWords?taskProofT('videoPrompt'):taskProofT('proofPrompt')));
+  const proof=prompt(description+'\\n\\n'+(needsTenWords?taskProofT('videoPrompt'):taskProofT('proofPrompt')));
   if(proof===null)return;
-  if(needsTenWords&&proof.trim().split(/\s+/).filter(Boolean).length<10){alert(taskProofT('videoTooShort'));return;}
+  if(needsTenWords&&proof.trim().split(/\\s+/).filter(Boolean).length<10){alert(taskProofT('videoTooShort'));return;}
   if(!needsTenWords&&proof.trim().length<10){alert(taskProofT('proofTooShort'));return;}
+  const file=btn?.closest('.listrow')?.querySelector('[data-task-proof-file]')?.files?.[0]||null;
+  if(file){
+    if(file.size>5242880){alert(taskProofT('imageTooLarge'));return;}
+    if(!['image/jpeg','image/png','image/webp'].includes(file.type)){alert(taskProofT('invalidImage'));return;}
+  }
   btn.disabled=true;btn.textContent=taskProofT('sending');
+  let uploadedPath=null;
   try{
-    const {error}=await supabaseClient.rpc('submit_task_for_review',{p_task_key:taskKey,p_proof:proof.trim()});
+    let proofToSubmit=proof.trim();
+    if(file){
+      const extension=file.type==='image/jpeg'?'jpg':file.type==='image/png'?'png':'webp';
+      uploadedPath=currentUser.id+'/'+crypto.randomUUID()+'.'+extension;
+      const {error:uploadError}=await supabaseClient.storage.from('task-proofs-private').upload(uploadedPath,file,{contentType:file.type,upsert:false});
+      if(uploadError)throw uploadError;
+      proofToSubmit='storage://task-proofs-private/'+uploadedPath+'\\n'+proof.trim();
+    }
+    if(proofToSubmit.length>1000)throw new Error(taskProofT('proofTooLong'));
+    const {error}=await supabaseClient.rpc('submit_task_for_review',{p_task_key:taskKey,p_proof:proofToSubmit});
     if(error)throw error;
     setMessage('dashboardMessage',taskProofT('success'));
     await loadAvailableTasks();
   }catch(err){
+    if(uploadedPath){try{await supabaseClient.storage.from('task-proofs-private').remove([uploadedPath]);}catch(cleanupError){console.warn('Task proof cleanup failed:',cleanupError);}}
     alert(taskProofT('failed')+' '+err.message);
     btn.disabled=false;btn.textContent=taskProofT('submit');
   }
