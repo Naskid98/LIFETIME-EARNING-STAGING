@@ -2317,12 +2317,10 @@ async function loadTaskSubmissions(){
   fr:{submit:'Envoyer la preuve',sending:'Envoi en cours...',login:'Veuillez vous connecter d’abord.',defaultPrompt:'Expliquez comment vous avez terminé cette tâche.',videoPrompt:'Écrivez au moins 10 mots tirés de la vidéo :',proofPrompt:'Saisissez une preuve d’au moins 10 caractères :',videoTooShort:'Cette tâche exige au moins 10 mots tirés de la vidéo.',proofTooShort:'Votre preuve est trop courte. Saisissez au moins 10 caractères.',success:'Votre tâche a été envoyée. Un administrateur vérifiera la preuve avant l’attribution des points.',failed:'Échec de l’envoi de la tâche :'},
   ar:{submit:'إرسال الإثبات',sending:'جارٍ الإرسال...',login:'يرجى تسجيل الدخول أولاً.',defaultPrompt:'اشرح كيف أكملت هذه المهمة.',videoPrompt:'اكتب عشر كلمات على الأقل من الفيديو:',proofPrompt:'أدخل إثباتاً لا يقل عن 10 أحرف:',videoTooShort:'تتطلب هذه المهمة كتابة عشر كلمات على الأقل من الفيديو.',proofTooShort:'الإثبات قصير جداً. أدخل عشرة أحرف على الأقل.',success:'تم إرسال مهمتك. سيراجع المشرف الإثبات قبل إضافة النقاط.',failed:'فشل إرسال المهمة:'}
 };
-Object.assign(taskProofTranslations,{
-  ha:{attachScreenshot:'Haɗa hoton shaida (zaɓi ne)',imageTooLarge:'Hoton ya wuce 5MB.',invalidImage:'JPG, PNG ko WEBP kawai ake karɓa.',proofTooLong:'Hujja tare da hoton ta wuce iyakar haruffa 1000.'},
-  en:{attachScreenshot:'Attach screenshot (optional)',imageTooLarge:'Image exceeds 5MB.',invalidImage:'Only JPG, PNG or WEBP images are accepted.',proofTooLong:'Proof and screenshot reference exceed the 1,000-character limit.'},
-  fr:{attachScreenshot:'Joindre une capture (facultatif)',imageTooLarge:'L’image dépasse 5 Mo.',invalidImage:'Seules les images JPG, PNG ou WEBP sont acceptées.',proofTooLong:'La preuve et la référence de l’image dépassent 1 000 caractères.'},
-  ar:{attachScreenshot:'إرفاق لقطة شاشة (اختياري)',imageTooLarge:'حجم الصورة يتجاوز 5 ميغابايت.',invalidImage:'يُقبل فقط JPG أو PNG أو WEBP.',proofTooLong:'تجاوز الإثبات ومرجع الصورة حد 1000 حرف.'}
-});
+Object.assign(taskProofTranslations.ha,{attachScreenshot:'Haɗa hoton shaida (zaɓi ne)',imageTooLarge:'Hoton ya wuce 5MB.',invalidImage:'JPG, PNG ko WEBP kawai ake karɓa.',proofTooLong:'Hujja tare da hoton ta wuce iyakar haruffa 1000.'});
+Object.assign(taskProofTranslations.en,{attachScreenshot:'Attach screenshot (optional)',imageTooLarge:'Image exceeds 5MB.',invalidImage:'Only JPG, PNG or WEBP images are accepted.',proofTooLong:'Proof and screenshot reference exceed the 1,000-character limit.'});
+Object.assign(taskProofTranslations.fr,{attachScreenshot:'Joindre une capture (facultatif)',imageTooLarge:'L’image dépasse 5 Mo.',invalidImage:'Seules les images JPG, PNG ou WEBP sont acceptées.',proofTooLong:'La preuve et la référence de l’image dépassent 1 000 caractères.'});
+Object.assign(taskProofTranslations.ar,{attachScreenshot:'إرفاق لقطة شاشة (اختياري)',imageTooLarge:'حجم الصورة يتجاوز 5 ميغابايت.',invalidImage:'يُقبل فقط JPG أو PNG أو WEBP.',proofTooLong:'تجاوز الإثبات ومرجع الصورة حد 1000 حرف.'});
 
 function taskProofT(key){const lang=localStorage.getItem('appLanguage')||'ha';return (taskProofTranslations[lang]||taskProofTranslations.ha)[key]||taskProofTranslations.ha[key];}
 async function completeTask(btn,taskKey){
