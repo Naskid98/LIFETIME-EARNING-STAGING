@@ -1879,6 +1879,15 @@ async function loadAdminPanel(){
 }
 
 let adminTaskSubmissionRows = [];
+let adminTaskProofUrls = {};
+function getTaskProofStoragePath(proof){
+  const prefix='storage://task-proofs-private/';
+  const value=String(proof||'');
+  if(!value.startsWith(prefix))return null;
+  const path=value.slice(prefix.length).split(/\\r?\\n/,1)[0].trim();
+  if(!path||path.startsWith('/')||path.split('/').some(part=>!part||part==='..'))return null;
+  return path;
+}
 let adminTaskLabels = {};
 let adminTaskUserNames = {};
 let adminTaskHistoryPage = 0;
@@ -1925,6 +1934,13 @@ async function loadAdminTaskSubmissions() {
   }
   adminTaskSubmissionRows = rows || [];
   adminTaskHistoryTotal = count || 0;
+  adminTaskProofUrls = {};
+  await Promise.all(adminTaskSubmissionRows.map(async row=>{
+    const path=getTaskProofStoragePath(row.proof);
+    if(!path||path.split('/')[0]!==row.user_id)return;
+    const {data,error}=await supabaseClient.storage.from('task-proofs-private').createSignedUrl(path,600);
+    if(!error&&data?.signedUrl)adminTaskProofUrls[row.id]=data.signedUrl;
+  }));
 
   const { data: taskRows, error: taskError } = await supabaseClient
     .from('tasks').select('task_key,title,reward_points');
@@ -1976,7 +1992,8 @@ function renderAdminTaskSubmissions() {
           <small>${adminT('userId')}: ${escapeHtml(r.user_id)}</small>
           <small>${adminT('submittedOn')}: ${new Date(r.created_at).toLocaleString(appDateLocale())}</small>
           ${r.reviewed_at ? `<small>${adminT('reviewedOn')}: ${new Date(r.reviewed_at).toLocaleString(appDateLocale())}</small>` : ''}
-          <p style="white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0"><span data-user-content>${escapeHtml(r.proof || '—')}</span></p>
+          <p style="white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0"><span data-user-content>${escapeHtml(getTaskProofStoragePath(r.proof)?String(r.proof).slice(('storage://task-proofs-private/'+getTaskProofStoragePath(r.proof)).length).replace(/^\\r?\\n/,''):r.proof||'—')}</span></p>
+          ${adminTaskProofUrls[r.id]?'<a href="'+escapeHtml(adminTaskProofUrls[r.id])+'" target="_blank" rel="noopener noreferrer"><img src="'+escapeHtml(adminTaskProofUrls[r.id])+'" alt="Task proof screenshot" loading="lazy" style="display:block;max-width:min(100%,420px);max-height:320px;object-fit:contain;border:1px solid var(--border);border-radius:10px;margin:8px 0"></a>':getTaskProofStoragePath(r.proof)?'<small>Screenshot preview is unavailable.</small>':''}
           ${r.admin_note ? `<small>${adminT('adminNote')}: <span data-user-content>${escapeHtml(r.admin_note)}</span></small>` : ''}
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
