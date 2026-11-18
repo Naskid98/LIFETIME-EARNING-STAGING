@@ -1884,7 +1884,7 @@ function getTaskProofStoragePath(proof){
   const prefix='storage://task-proofs-private/';
   const value=String(proof||'');
   if(!value.startsWith(prefix))return null;
-  const path=value.slice(prefix.length).split(/\\r?\\n/,1)[0].trim();
+  const path=value.slice(prefix.length).split(/\r?\n/,1)[0].trim();
   if(!path||path.startsWith('/')||path.split('/').some(part=>!part||part==='..'))return null;
   return path;
 }
@@ -1992,7 +1992,7 @@ function renderAdminTaskSubmissions() {
           <small>${adminT('userId')}: ${escapeHtml(r.user_id)}</small>
           <small>${adminT('submittedOn')}: ${new Date(r.created_at).toLocaleString(appDateLocale())}</small>
           ${r.reviewed_at ? `<small>${adminT('reviewedOn')}: ${new Date(r.reviewed_at).toLocaleString(appDateLocale())}</small>` : ''}
-          <p style="white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0"><span data-user-content>${escapeHtml(getTaskProofStoragePath(r.proof)?String(r.proof).slice(('storage://task-proofs-private/'+getTaskProofStoragePath(r.proof)).length).replace(/^\\r?\\n/,''):r.proof||'—')}</span></p>
+          <p style="white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0"><span data-user-content>${escapeHtml(getTaskProofStoragePath(r.proof)?String(r.proof).slice(('storage://task-proofs-private/'+getTaskProofStoragePath(r.proof)).length).replace(/^\r?\n/,''):r.proof||'—')}</span></p>
           ${adminTaskProofUrls[r.id]?'<a href="'+escapeHtml(adminTaskProofUrls[r.id])+'" target="_blank" rel="noopener noreferrer"><img src="'+escapeHtml(adminTaskProofUrls[r.id])+'" alt="Task proof screenshot" loading="lazy" style="display:block;max-width:min(100%,420px);max-height:320px;object-fit:contain;border:1px solid var(--border);border-radius:10px;margin:8px 0"></a>':getTaskProofStoragePath(r.proof)?'<small>Screenshot preview is unavailable.</small>':''}
           ${r.admin_note ? `<small>${adminT('adminNote')}: <span data-user-content>${escapeHtml(r.admin_note)}</span></small>` : ''}
         </div>
@@ -2173,9 +2173,9 @@ async function completeTask(btn,taskKey){
   if(!currentUser){setMessage('dashboardMessage',taskProofT('login'));return;}
   const description=btn?.dataset?.taskDescription||taskProofT('defaultPrompt');
   const needsTenWords=taskKey.startsWith('ka_duba_sabon_update_na_yau_');
-  const proof=prompt(description+'\\n\\n'+(needsTenWords?taskProofT('videoPrompt'):taskProofT('proofPrompt')));
+  const proof=prompt(description+'\n\n'+(needsTenWords?taskProofT('videoPrompt'):taskProofT('proofPrompt')));
   if(proof===null)return;
-  if(needsTenWords&&proof.trim().split(/\\s+/).filter(Boolean).length<10){alert(taskProofT('videoTooShort'));return;}
+  if(needsTenWords&&proof.trim().split(/\s+/).filter(Boolean).length<10){alert(taskProofT('videoTooShort'));return;}
   if(!needsTenWords&&proof.trim().length<10){alert(taskProofT('proofTooShort'));return;}
   const file=btn?.closest('.listrow')?.querySelector('[data-task-proof-file]')?.files?.[0]||null;
   if(file){
@@ -2191,7 +2191,7 @@ async function completeTask(btn,taskKey){
       uploadedPath=currentUser.id+'/'+crypto.randomUUID()+'.'+extension;
       const {error:uploadError}=await supabaseClient.storage.from('task-proofs-private').upload(uploadedPath,file,{contentType:file.type,upsert:false});
       if(uploadError)throw uploadError;
-      proofToSubmit='storage://task-proofs-private/'+uploadedPath+'\\n'+proof.trim();
+      proofToSubmit='storage://task-proofs-private/'+uploadedPath+'\n'+proof.trim();
     }
     if(proofToSubmit.length>1000)throw new Error(taskProofT('proofTooLong'));
     const {error}=await supabaseClient.rpc('submit_task_for_review',{p_task_key:taskKey,p_proof:proofToSubmit});
