@@ -1249,6 +1249,36 @@ Object.assign(adminTranslations.en, {translationsHeading:'Content translations (
 Object.assign(adminTranslations.fr, {translationsHeading:'Traductions du contenu (facultatif)',translationEn:'Anglais',translationFr:'Français',translationAr:'Arabe',translationFallback:'Si une traduction est vide, le texte original en haoussa sera affiché.',newsletterCreateHeading:'Créer une annonce',newsletterTitleLabel:'Titre de l’annonce (haoussa)',newsletterBodyLabel:'Message de l’annonce (haoussa)',taskTranslationHelp:'Saisissez les traductions disponibles. Ces champs sont facultatifs.',});
 Object.assign(adminTranslations.ar, {translationsHeading:'ترجمات المحتوى (اختياري)',translationEn:'الإنجليزية',translationFr:'الفرنسية',translationAr:'العربية',translationFallback:'إذا كانت الترجمة فارغة فسيظهر النص الأصلي بلغة الهوسا.',newsletterCreateHeading:'إنشاء إعلان',newsletterTitleLabel:'عنوان الإعلان (الهوسا)',newsletterBodyLabel:'نص الإعلان (الهوسا)',taskTranslationHelp:'أدخل ترجمة كل لغة عند توفرها. هذه الحقول اختيارية.',});
 
+
+Object.assign(adminTranslations.ha,{
+  adminWorkspace:'WURIN GUDANARWA',adminCenter:'Cibiyar Gudanarwa',adminDashboard:'Babban Shafin Gudanarwa',
+  taskManagerShortcut:'✓ Ayyuka',referralTasksShortcut:'🎯 Ayyukan Gayyata 3',withdrawals:'💳 Cire kuɗi',users:'👥 Masu amfani',
+  totalUsers:'Jimillar masu amfani',totalWalletBalance:'Jimillar ma’aunin Wallet',totalWithdrawals:'Jimillar cire kuɗi',pendingWithdrawals:'Cire kuɗi da ke jira',
+  taskManager:'Gudanar da Ayyuka',referralCommission:'🎯 Ladan Gayyata — Ayyuka 3 na dole',saveReferralTasks:'Ajiye Ayyukan Gayyata 3',
+  newsletter:'Sanarwa / Newsletter',taskReview:'Duba Ayyuka',pending:'Yana jira',approved:'An amince',rejected:'An ƙi',
+  withdrawalManagement:'Gudanar da cire kuɗi',userManagement:'Gudanar da masu amfani',advertiserManagementShortcut:'📢 Gudanar da masu talla',
+  noTaskSubmissions:'Babu hujjojin kammala aiki tukuna.',userId:'ID na mai amfani',taskHistory:'📚 Tarihin Ayyuka',
+  taskHistoryIntro:'Dukkan ayyukan da masu amfani suka aika, tare da matsayinsu na jira, amincewa ko ƙin yarda, suna nan a wuri guda.',
+  taskManagerDesc:'A nan za ka ƙirƙiri ayyukan yau da kullum. Sashen da ke ƙasa na musamman ne domin ayyuka 3 da sabon mai amfani zai kammala kafin mai gayyata ya samu ladan gayyata.',
+  referralDesc:'Waɗannan ayyuka uku ne tsarin gayyata yake dubawa. Kada a canza makullan ayyukan ko a dakatar da su. Za ka iya gyara suna, umarni da maki.',
+  task1Label:'Aiki 1 — Kammala bayanan asusu',task2Label:'Aiki 2 — Duba shafin fasaloli',task3Label:'Aiki 3 — Karanta dokokin website',
+  taskInstruction1:'Umarnin Aiki 1',taskInstruction2:'Umarnin Aiki 2',taskInstruction3:'Umarnin Aiki 3',points:'Maki',
+  createTaskTitle:'Sunan Aiki',createTaskDescription:'Bayani da umarnin aiki',createTaskPoints:'Maki da za a bayar',
+  taskExpiry:'Ranar/lokacin ƙarewar aiki (ba dole ba)',createTask:'Ƙirƙiri aiki',
+  taskCreatedNotice:'Sabon aiki zai bayyana ga masu amfani bayan an ƙirƙira shi.',
+  newsletterDesc:'Rubuta sanarwa domin ta bayyana ga duk masu amfani. Za ka iya saita lokacin da za ta ƙare.',
+  taskReviewDesc:'Duba hujjojin masu amfani. Ka amince ne kawai idan hujjar ta dace da aikin da aka nema.',
+  usersDesc:'Jerin masu amfani da makinsu. Kada a raba bayanan sirri.',
+  referralTasksLoaded:'An ɗauko ayyuka uku. Waɗannan su ne ayyukan da tsarin ke dubawa kafin bayar da ladan gayyata.',
+  taskPointsLabel:'Maki',taskActive:'Yana aiki',tasksLoading:'Ana ɗauko ayyuka...',
+  noPublishedTasks:'Babu ayyuka tukuna.',taskCreateValidation:'Ka duba sunan aiki, bayani da maki.',
+  taskCreateSuccess:'An ƙirƙiri aiki cikin nasara. Yanzu masu amfani za su iya ganinsa.',
+  taskCreateError:'Ba a iya ƙirƙirar aiki ba:',taskStatusError:'Ba a iya sauya matsayin aiki ba:',
+  referralTaskCannotDeactivate:'Ba za a dakatar da wannan aiki ba, domin yana cikin ayyuka 3 da ake bukata kafin a bayar da ladan gayyata.',
+  translationsHeading:'Fassarorin rubutun (ba dole ba)',translationEn:'Turanci',translationFr:'Faransanci',translationAr:'Larabci',
+  taskTranslationHelp:'Cika fassarar kowane harshe idan kana da ita. Ba dole ba ne.'
+});
+
 function adminT(key, language=localStorage.getItem('appLanguage')||'ha'){
   return (adminTranslations[language]||adminTranslations.ha)[key]||adminTranslations.ha[key]||key;}
 
