@@ -2208,7 +2208,10 @@ async function loadAdminTaskSubmissions() {
 
   const { data: taskRows, error: taskError } = await supabaseClient
     .from('tasks').select('task_key,title,reward_points,translations');
-  if (taskError) console.warn('Could not load task labels:', taskError.message);
+  if (taskError) {
+    target.textContent = adminT('tasksLoadError') + ' ' + taskError.message;
+    return;
+  }
   adminTaskLabels = Object.fromEntries((taskRows || []).map(t => {
     const meta=t.translations?._task||{};
     const extra=meta.type?(' • '+taskTypeLabel(meta.type)):'';
@@ -2221,18 +2224,25 @@ async function loadAdminTaskSubmissions() {
   if (userIds.length) {
     const { data: profiles, error: profileError } = await supabaseClient
       .from('profiles').select('id,full_name').in('id', userIds);
-    if (profileError) console.warn('Could not load task submitter names:', profileError.message);
+    if (profileError) {
+      target.textContent = adminT('tasksLoadError') + ' ' + profileError.message;
+      return;
+    }
     adminTaskUserNames = Object.fromEntries((profiles || []).map(u => [u.id, u.full_name || '—']));
   }
 
-  const [pendingCount, approvedCount, rejectedCount] = await Promise.all(
-    ['pending', 'approved', 'rejected'].map(async status => {
-      const result = await supabaseClient.from('task_submissions')
-        .select('id', { count: 'exact', head: true }).eq('status', status);
-      if (result.error) console.warn('Could not count task status:', result.error.message);
-      return result.count || 0;
-    })
+  const countResults = await Promise.all(
+    ['pending', 'approved', 'rejected'].map(status =>
+      supabaseClient.from('task_submissions')
+        .select('id', { count: 'exact', head: true }).eq('status', status)
+    )
   );
+  const countError = countResults.find(result => result.error)?.error;
+  if (countError) {
+    target.textContent = adminT('tasksLoadError') + ' ' + countError.message;
+    return;
+  }
+  const [pendingCount, approvedCount, rejectedCount] = countResults.map(result => result.count || 0);
   document.getElementById('adminPendingTasks').textContent = pendingCount.toLocaleString();
   document.getElementById('adminApprovedTasks').textContent = approvedCount.toLocaleString();
   document.getElementById('adminRejectedTasks').textContent = rejectedCount.toLocaleString();
