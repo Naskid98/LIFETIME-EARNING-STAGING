@@ -2173,6 +2173,12 @@ async function loadAdminTaskSubmissions() {
         supabaseClient.from('profiles').select('id').ilike('full_name', pattern).limit(500),
         supabaseClient.from('tasks').select('task_key').ilike('title', pattern).limit(500)
       ]);
+      // Do not silently show incomplete search results when related lookups fail.
+      const lookupError = matchingProfiles.error || matchingTasks.error;
+      if (lookupError) {
+        target.textContent = adminT('tasksLoadError') + ' ' + lookupError.message;
+        return;
+      }
       const clauses = ['task_key.ilike.' + pattern, 'proof.ilike.' + pattern, 'admin_note.ilike.' + pattern];
       if (/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(safeSearch)) clauses.push('user_id.eq.' + safeSearch);
       const profileIds = (matchingProfiles.data || []).map(x => x.id).filter(Boolean);
