@@ -195,6 +195,7 @@ html[dir="rtl"] body{direction:rtl;text-align:right}html[dir="rtl"] input,html[d
 </div>
 <details class="admin-tool-group" id="adminTaskManagerGroup"><summary>✓ Task Manager & Task History</summary><div class="admin-tool-content">
 <h3 id="adminTaskHeading" data-admin-key="taskManager">Task Manager</h3>
+<details class="admin-tool-subgroup" id="adminReferralQualificationGroup"><summary>🎯 Referral Commission Tasks</summary><div>
 <h3 id="referralQualificationManager" data-admin-key="referralCommission">🎯 Referral Commission — Tasks 3 na dole</h3>
 <p data-admin-key="referralDesc">Waɗannan tasks uku ne tsarin referral yake dubawa. Kada a canza maɓallan su (task keys) ko a dakatar da su. Za ka iya gyara suna, umarni da Points.</p>
 
@@ -230,9 +231,15 @@ html[dir="rtl"] body{direction:rtl;text-align:right}html[dir="rtl"] input,html[d
 </form>
 
 
+
+</div></details>
+<details class="admin-tool-subgroup" id="adminPublishedTasksGroup"><summary>📋 Published Tasks / Tasks da aka wallafa</summary><div>
 <h4 data-admin-key="publishedTasksHeading">Tasks da aka riga aka wallafa</h4>
 <div id="adminTasksList">Ana ɗauko Tasks...</div>
 
+
+</div></details>
+<details class="admin-tool-subgroup" id="adminCreateTaskGroup"><summary>➕ Create New Task / Ƙirƙiri sabon Task</summary><div>
 <h4 data-admin-key="createTaskHeading">Wallafa sabon Task</h4>
 <form id="adminCreateTaskForm" onsubmit="createAdminTask(event)" style="max-width:650px;margin:12px 0 22px">
   <label class="field"><span data-admin-key="createTaskTitle">Sunan Task</span><input id="newTaskTitle" maxlength="100" required></label>
@@ -253,8 +260,11 @@ html[dir="rtl"] body{direction:rtl;text-align:right}html[dir="rtl"] input,html[d
   <div id="adminTaskMessage" class="noticebox" role="status"></div>
 </form>
 
-<details id="adminTaskHistoryRoom" class="panel" style="margin-top:24px;padding:16px">
-  <summary style="cursor:pointer;font-weight:800;font-size:1.08rem" id="adminReviewHeading" data-admin-key="taskHistory">📚 Task History</summary>
+
+</div></details>
+<details id="adminTaskHistoryRoom" class="admin-tool-subgroup panel" style="margin-top:11px;padding:0">
+  <summary style="cursor:pointer;font-weight:800;font-size:1.08rem" id="adminReviewHeading" data-admin-key="taskHistory">📚 Task History & Submission Reviews</summary>
+  <div>
   <p class="empty-note" data-admin-key="taskHistoryIntro">Dukkan tasks da users suka aika, tare da Pending, Approved da Rejected, suna nan a wuri guda.</p>
   <div class="dash-grid" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr));margin:12px 0">
     <div class="stat"><span data-admin-key="pending">Pending</span><strong id="adminPendingTasks">—</strong></div>
@@ -272,6 +282,7 @@ html[dir="rtl"] body{direction:rtl;text-align:right}html[dir="rtl"] input,html[d
   </div>
   <div id="adminTaskSubmissions">Ana ɗauko submissions...</div>
   <div id="adminTaskHistoryPagination" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px"></div>
+  </div>
 </details>
 </div></details>
 <details class="admin-tool-group" id="adminAnnouncementsGroup"><summary>📰 Announcements / Newsletter</summary><div class="admin-tool-content">
