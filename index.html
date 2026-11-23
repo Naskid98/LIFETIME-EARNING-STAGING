@@ -2184,11 +2184,14 @@ async function loadAdminTaskSubmissions() {
   }));
 
   const { data: taskRows, error: taskError } = await supabaseClient
-    .from('tasks').select('task_key,title,reward_points');
+    .from('tasks').select('task_key,title,reward_points,translations');
   if (taskError) console.warn('Could not load task labels:', taskError.message);
-  adminTaskLabels = Object.fromEntries((taskRows || []).map(t => [
-    t.task_key, t.title + ' (' + t.reward_points + ' Points)'
-  ]));
+  adminTaskLabels = Object.fromEntries((taskRows || []).map(t => {
+    const meta=t.translations?._task||{};
+    const extra=meta.type?(' • '+taskTypeLabel(meta.type)):'';
+    const question=meta.type==='question_answer'&&meta.question?(' • Question: '+meta.question):'';
+    return [t.task_key,t.title+' ('+t.reward_points+' Points)'+extra+question];
+  }));
 
   const userIds = [...new Set(adminTaskSubmissionRows.map(r => r.user_id).filter(Boolean))];
   adminTaskUserNames = {};
