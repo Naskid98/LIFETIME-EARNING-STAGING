@@ -2677,12 +2677,14 @@ async function createAdminTask(event){
   const description=document.getElementById('newTaskDescription').value.trim();
   const reward=Number(document.getElementById('newTaskPoints').value);
   const expiryValue=document.getElementById('newTaskExpiry')?.value||'';
-  const expiresAt=expiryValue?new Date(expiryValue).toISOString():null;
+  const expiryDate=expiryValue?new Date(expiryValue):null;
+  const expiresAt=expiryDate?expiryDate.toISOString():null;
   const taskType=document.getElementById('newTaskType')?.value||'general';
   const question=document.getElementById('newTaskQuestion')?.value.trim()||'';
   const actionUrl=document.getElementById('newTaskUrl')?.value.trim()||'';
   const button=document.getElementById('createTaskButton');
   if(!title||!description||!Number.isSafeInteger(reward)||reward<1||reward>1000000){setMessage('adminTaskMessage',adminT('taskCreateValidation'));return;}
+  if(expiryValue&&(!expiryDate||Number.isNaN(expiryDate.getTime())||expiryDate.getTime()<=Date.now())){setMessage('adminTaskMessage',({ha:'Lokacin ƙarewar task dole ya kasance a gaba.',en:'Task expiry must be a future date and time.',fr:'La date d’expiration doit être dans le futur.',ar:'يجب أن يكون وقت انتهاء المهمة في المستقبل.'})[localStorage.getItem('appLanguage')||'ha']);return;}
   if(taskType==='question_answer'&&question.length<5){setMessage('adminTaskMessage',({ha:'Ka rubuta tambayar da za a amsa (aƙalla haruffa 5).',en:'Please enter a question of at least 5 characters.',fr:'Veuillez saisir une question de 5 caractères minimum.',ar:'يرجى إدخال سؤال لا يقل عن 5 أحرف.'})[localStorage.getItem('appLanguage')||'ha']);return;}
   if(['watch_video','visit_website','visit_app'].includes(taskType)){
     try{const parsed=new URL(actionUrl);if(parsed.protocol!=='https:')throw new Error('HTTPS only');}
