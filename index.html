@@ -195,6 +195,7 @@ html[dir="rtl"] body{direction:rtl;text-align:right}html[dir="rtl"] input,html[d
 </div>
 <details class="admin-tool-group" id="adminTaskManagerGroup"><summary>✓ Task Manager & Task History</summary><div class="admin-tool-content">
 <h3 id="adminTaskHeading" data-admin-key="taskManager">Task Manager</h3>
+<details class="admin-tool-subgroup" id="adminReferralQualificationGroup"><summary>🎯 Referral Commission Tasks</summary><div>
 <h3 id="referralQualificationManager" data-admin-key="referralCommission">🎯 Referral Commission — Tasks 3 na dole</h3>
 <p data-admin-key="referralDesc">Waɗannan tasks uku ne tsarin referral yake dubawa. Kada a canza maɓallan su (task keys) ko a dakatar da su. Za ka iya gyara suna, umarni da Points.</p>
 
@@ -230,13 +231,23 @@ html[dir="rtl"] body{direction:rtl;text-align:right}html[dir="rtl"] input,html[d
 </form>
 
 
+
+</div></details>
+<details class="admin-tool-subgroup" id="adminPublishedTasksGroup"><summary>📋 Published Tasks / Tasks da aka wallafa</summary><div>
 <h4 data-admin-key="publishedTasksHeading">Tasks da aka riga aka wallafa</h4>
 <div id="adminTasksList">Ana ɗauko Tasks...</div>
 
+
+</div></details>
+<details class="admin-tool-subgroup" id="adminCreateTaskGroup"><summary>➕ Create New Task / Ƙirƙiri sabon Task</summary><div>
 <h4 data-admin-key="createTaskHeading">Wallafa sabon Task</h4>
 <form id="adminCreateTaskForm" onsubmit="createAdminTask(event)" style="max-width:650px;margin:12px 0 22px">
   <label class="field"><span data-admin-key="createTaskTitle">Sunan Task</span><input id="newTaskTitle" maxlength="100" required></label>
   <label class="field"><span data-admin-key="createTaskDescription">Bayani da umarnin Task</span><textarea id="newTaskDescription" maxlength="1000" required rows="3" style="width:100%;padding:13px 14px;border:1px solid #d9e4da;border-radius:11px;background:#fbfdfb"></textarea></label>
+  <label class="field"><span>Task Type / Nau'in Task</span><select id="newTaskType" onchange="updateTaskTypeFields()"><option value="general">General Task</option><option value="question_answer">Question &amp; Answer</option><option value="watch_video">Watch Video</option><option value="visit_website">Visit Website</option><option value="visit_app">Visit App</option></select></label>
+  <label class="field" id="newTaskQuestionField" hidden><span>Question / Tambayar da za a amsa</span><textarea id="newTaskQuestion" maxlength="1000" rows="2" placeholder="Rubuta tambayar da mai amfani zai amsa"></textarea></label>
+  <label class="field" id="newTaskUrlField" hidden><span>Task URL (HTTPS)</span><input id="newTaskUrl" type="url" maxlength="2048" placeholder="https://example.com"></label>
+  <p class="empty-note">Dukkan nau'ukan task za su bi tsarin hujja da bitar admin na yanzu. Ba a kunna automatic verification ba.</p>
   <details style="margin:12px 0"><summary data-admin-key="translationsHeading" style="cursor:pointer;font-weight:800">Fassarorin rubutun (ba dole ba)</summary><p class="empty-note" data-admin-key="taskTranslationHelp">Cika fassarar kowane harshe idan kana da ita. Ba dole ba ne.</p>
     <label class="field"><span data-admin-key="translationEn">English</span><input id="newTaskTitleEn" maxlength="100" placeholder="English task title"></label><textarea id="newTaskDescriptionEn" maxlength="1000" rows="3" placeholder="English task instructions" style="width:100%;padding:13px;border:1px solid #d9e4da;border-radius:11px"></textarea>
     <label class="field"><span data-admin-key="translationFr">Français</span><input id="newTaskTitleFr" maxlength="100" placeholder="Titre de la tâche"></label><textarea id="newTaskDescriptionFr" maxlength="1000" rows="3" placeholder="Instructions en français" style="width:100%;padding:13px;border:1px solid #d9e4da;border-radius:11px"></textarea>
@@ -249,8 +260,11 @@ html[dir="rtl"] body{direction:rtl;text-align:right}html[dir="rtl"] input,html[d
   <div id="adminTaskMessage" class="noticebox" role="status"></div>
 </form>
 
-<details id="adminTaskHistoryRoom" class="panel" style="margin-top:24px;padding:16px">
-  <summary style="cursor:pointer;font-weight:800;font-size:1.08rem" id="adminReviewHeading" data-admin-key="taskHistory">📚 Task History</summary>
+
+</div></details>
+<details id="adminTaskHistoryRoom" class="admin-tool-subgroup panel" style="margin-top:11px;padding:0">
+  <summary style="cursor:pointer;font-weight:800;font-size:1.08rem" id="adminReviewHeading" data-admin-key="taskHistory">📚 Task History & Submission Reviews</summary>
+  <div>
   <p class="empty-note" data-admin-key="taskHistoryIntro">Dukkan tasks da users suka aika, tare da Pending, Approved da Rejected, suna nan a wuri guda.</p>
   <div class="dash-grid" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr));margin:12px 0">
     <div class="stat"><span data-admin-key="pending">Pending</span><strong id="adminPendingTasks">—</strong></div>
@@ -268,6 +282,7 @@ html[dir="rtl"] body{direction:rtl;text-align:right}html[dir="rtl"] input,html[d
   </div>
   <div id="adminTaskSubmissions">Ana ɗauko submissions...</div>
   <div id="adminTaskHistoryPagination" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px"></div>
+  </div>
 </details>
 </div></details>
 <details class="admin-tool-group" id="adminAnnouncementsGroup"><summary>📰 Announcements / Newsletter</summary><div class="admin-tool-content">
@@ -1465,6 +1480,12 @@ Object.assign(appUiTranslations.en,{'Reply':'Reply'});
 Object.assign(appUiTranslations.fr,{'Reply':'Répondre'});
 Object.assign(appUiTranslations.ar,{'Reply':'رد'});
 
+// Advanced Task Manager labels and guidance for all supported languages.
+Object.assign(appUiTranslations.ha,{"Task Type / Nau'in Task":"Nau'in Task","General Task":"Task na gama-gari","Question & Answer":"Tambaya da Amsa","Watch Video":"Kalli Bidiyo","Visit Website":"Ziyarci Yanar Gizo","Visit App":"Ziyarci App","Question / Tambayar da za a amsa":"Tambayar da za a amsa","Rubuta tambayar da mai amfani zai amsa":"Rubuta tambayar da mai amfani zai amsa","Task URL (HTTPS)":"URL na Task (HTTPS)","Dukkan nau'ukan task za su bi tsarin hujja da bitar admin na yanzu. Ba a kunna automatic verification ba.":"Dukkan nau'ukan Task suna bukatar hujja; admin ne zai duba su da hannu. Ba a kunna tantancewa ta atomatik ba."});
+Object.assign(appUiTranslations.en,{"Task Type / Nau'in Task":"Task type","General Task":"General task","Question & Answer":"Question & answer","Watch Video":"Watch video","Visit Website":"Visit website","Visit App":"Visit app","Question / Tambayar da za a amsa":"Question to answer","Rubuta tambayar da mai amfani zai amsa":"Enter the question users must answer","Task URL (HTTPS)":"Task URL (HTTPS)","Dukkan nau'ukan task za su bi tsarin hujja da bitar admin na yanzu. Ba a kunna automatic verification ba.":"All task types require proof and manual admin review. Automatic verification is not enabled."});
+Object.assign(appUiTranslations.fr,{"Task Type / Nau'in Task":"Type de tâche","General Task":"Tâche générale","Question & Answer":"Question et réponse","Watch Video":"Regarder une vidéo","Visit Website":"Visiter le site web","Visit App":"Visiter l’application","Question / Tambayar da za a amsa":"Question à laquelle répondre","Rubuta tambayar da mai amfani zai amsa":"Saisissez la question à laquelle l’utilisateur doit répondre","Task URL (HTTPS)":"URL de la tâche (HTTPS)","Dukkan nau'ukan task za su bi tsarin hujja da bitar admin na yanzu. Ba a kunna automatic verification ba.":"Tous les types de tâches exigent une preuve et une vérification manuelle par l’administrateur. La vérification automatique n’est pas activée."});
+Object.assign(appUiTranslations.ar,{"Task Type / Nau'in Task":"نوع المهمة","General Task":"مهمة عامة","Question & Answer":"سؤال وجواب","Watch Video":"مشاهدة فيديو","Visit Website":"زيارة موقع إلكتروني","Visit App":"زيارة تطبيق","Question / Tambayar da za a amsa":"السؤال المطلوب الإجابة عنه","Rubuta tambayar da mai amfani zai amsa":"اكتب السؤال الذي يجب على المستخدم الإجابة عنه","Task URL (HTTPS)":"رابط المهمة (HTTPS)","Dukkan nau'ukan task za su bi tsarin hujja da bitar admin na yanzu. Ba a kunna automatic verification ba.":"تتطلب جميع أنواع المهام دليلاً ومراجعة يدوية من المسؤول. التحقق التلقائي غير مفعّل."});
+
 function applyAdminTranslations(language, root=document){
   const dict=adminTranslations[language]||adminTranslations.ha;
   const scope=root||document;
@@ -2152,6 +2173,12 @@ async function loadAdminTaskSubmissions() {
         supabaseClient.from('profiles').select('id').ilike('full_name', pattern).limit(500),
         supabaseClient.from('tasks').select('task_key').ilike('title', pattern).limit(500)
       ]);
+      // Do not silently show incomplete search results when related lookups fail.
+      const lookupError = matchingProfiles.error || matchingTasks.error;
+      if (lookupError) {
+        target.textContent = adminT('tasksLoadError') + ' ' + lookupError.message;
+        return;
+      }
       const clauses = ['task_key.ilike.' + pattern, 'proof.ilike.' + pattern, 'admin_note.ilike.' + pattern];
       if (/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(safeSearch)) clauses.push('user_id.eq.' + safeSearch);
       const profileIds = (matchingProfiles.data || []).map(x => x.id).filter(Boolean);
@@ -2161,16 +2188,32 @@ async function loadAdminTaskSubmissions() {
       submissionQuery = submissionQuery.or(clauses.join(','));
     }
   }
-  const { data: rows, error, count } = await submissionQuery
+  let queryResult = await submissionQuery
     .order('created_at', { ascending: false })
     .range(from, to);
 
-  if (error) {
-    target.textContent = adminT('tasksLoadError') + ' ' + error.message;
+  if (queryResult.error) {
+    target.textContent = adminT('tasksLoadError') + ' ' + queryResult.error.message;
     return;
   }
-  adminTaskSubmissionRows = rows || [];
-  adminTaskHistoryTotal = count || 0;
+
+  // Keep pagination on a valid page when review actions reduce the result count.
+  const totalRows = queryResult.count || 0;
+  const lastValidPage = Math.max(0, Math.ceil(totalRows / ADMIN_TASK_HISTORY_PAGE_SIZE) - 1);
+  if (adminTaskHistoryPage > lastValidPage) {
+    adminTaskHistoryPage = lastValidPage;
+    const adjustedFrom = adminTaskHistoryPage * ADMIN_TASK_HISTORY_PAGE_SIZE;
+    queryResult = await submissionQuery
+      .order('created_at', { ascending: false })
+      .range(adjustedFrom, adjustedFrom + ADMIN_TASK_HISTORY_PAGE_SIZE - 1);
+    if (queryResult.error) {
+      target.textContent = adminT('tasksLoadError') + ' ' + queryResult.error.message;
+      return;
+    }
+  }
+
+  adminTaskSubmissionRows = queryResult.data || [];
+  adminTaskHistoryTotal = queryResult.count || 0;
   adminTaskProofUrls = {};
   await Promise.all(adminTaskSubmissionRows.map(async row=>{
     const path=getTaskProofStoragePath(row.proof);
@@ -2180,29 +2223,42 @@ async function loadAdminTaskSubmissions() {
   }));
 
   const { data: taskRows, error: taskError } = await supabaseClient
-    .from('tasks').select('task_key,title,reward_points');
-  if (taskError) console.warn('Could not load task labels:', taskError.message);
-  adminTaskLabels = Object.fromEntries((taskRows || []).map(t => [
-    t.task_key, t.title + ' (' + t.reward_points + ' Points)'
-  ]));
+    .from('tasks').select('task_key,title,reward_points,translations');
+  if (taskError) {
+    target.textContent = adminT('tasksLoadError') + ' ' + taskError.message;
+    return;
+  }
+  adminTaskLabels = Object.fromEntries((taskRows || []).map(t => {
+    const meta=t.translations?._task||{};
+    const extra=meta.type?(' • '+taskTypeLabel(meta.type)):'';
+    const question=meta.type==='question_answer'&&meta.question?(' • Question: '+meta.question):'';
+    return [t.task_key,t.title+' ('+t.reward_points+' Points)'+extra+question];
+  }));
 
   const userIds = [...new Set(adminTaskSubmissionRows.map(r => r.user_id).filter(Boolean))];
   adminTaskUserNames = {};
   if (userIds.length) {
     const { data: profiles, error: profileError } = await supabaseClient
       .from('profiles').select('id,full_name').in('id', userIds);
-    if (profileError) console.warn('Could not load task submitter names:', profileError.message);
+    if (profileError) {
+      target.textContent = adminT('tasksLoadError') + ' ' + profileError.message;
+      return;
+    }
     adminTaskUserNames = Object.fromEntries((profiles || []).map(u => [u.id, u.full_name || '—']));
   }
 
-  const [pendingCount, approvedCount, rejectedCount] = await Promise.all(
-    ['pending', 'approved', 'rejected'].map(async status => {
-      const result = await supabaseClient.from('task_submissions')
-        .select('id', { count: 'exact', head: true }).eq('status', status);
-      if (result.error) console.warn('Could not count task status:', result.error.message);
-      return result.count || 0;
-    })
+  const countResults = await Promise.all(
+    ['pending', 'approved', 'rejected'].map(status =>
+      supabaseClient.from('task_submissions')
+        .select('id', { count: 'exact', head: true }).eq('status', status)
+    )
   );
+  const countError = countResults.find(result => result.error)?.error;
+  if (countError) {
+    target.textContent = adminT('tasksLoadError') + ' ' + countError.message;
+    return;
+  }
+  const [pendingCount, approvedCount, rejectedCount] = countResults.map(result => result.count || 0);
   document.getElementById('adminPendingTasks').textContent = pendingCount.toLocaleString();
   document.getElementById('adminApprovedTasks').textContent = approvedCount.toLocaleString();
   document.getElementById('adminRejectedTasks').textContent = rejectedCount.toLocaleString();
@@ -2354,7 +2410,7 @@ async function loadAvailableTasks(){
   const target=document.getElementById('availableTasks');
   if(!target||!currentUser)return;
   const {data:tasks,error}=await supabaseClient.from('tasks')
-    .select('task_key,title,description,translations,reward_points,is_active,expires_at')
+    .select('task_key,title,description,translations,reward_points,is_active,expires_at,action_url')
     .eq('is_active',true).order('created_at',{ascending:true});
   if(error){target.textContent='Ba a iya ɗauko Tasks ba: '+error.message;return;}
   const now=Date.now();
@@ -2374,9 +2430,15 @@ async function loadAvailableTasks(){
     const isRequired=requiredReferralKeys.has(t.task_key);
     const title=localizedContent(t,'title',language);
     const description=localizedContent(t,'description',language);
+    const meta=t.translations?._task||{},taskType=meta.type||'general',question=meta.question||'';
+    const safeUrl=t.action_url&&/^https:\/\//i.test(t.action_url)?t.action_url:'';
     const noScreenshot=t.task_key.startsWith('gwada_shafin_profile_')||t.task_key.startsWith('gwada_shafin_reffaral_');
     const screenshotInput=noScreenshot?'':`<label class="task-proof-upload" style="display:block;margin:10px 0;font-size:13px">${taskProofT('attachScreenshot')} <input type="file" data-task-proof-file accept="image/jpeg,image/png,image/webp" style="display:block;max-width:100%;margin-top:5px"></label>`;
-    return `<div class="listrow" style="align-items:flex-start"><div style="min-width:0;flex:1"><b>${escapeHtml(title)}</b>${isRequired?'<small class="tag">Dole domin Referral Commission</small>':''}<small>${escapeHtml(description)}</small><small class="tag">${Number(t.reward_points)} Points</small>${t.expires_at?`<small>Wa’adi: ${new Date(t.expires_at).toLocaleString(appDateLocale())}</small>`:''}${screenshotInput}</div><button class="btn btn-soft" data-task-key="${escapeHtml(t.task_key)}" data-task-description="${escapeHtml(description)}" onclick="completeTask(this,'${escapeHtml(t.task_key)}')">${taskProofT('submit')}</button></div>`;
+    const actionLabel=taskType==='watch_video'?taskUiT('watchLink',language):taskType==='visit_app'?taskUiT('appLink',language):taskUiT('websiteLink',language);
+    const actionLink=safeUrl?'<p><a href="'+escapeHtml(safeUrl)+'" target="_blank" rel="noopener noreferrer" class="btn btn-soft">'+actionLabel+'</a></p>':'';
+    const questionBlock=taskType==='question_answer'?'<small><b>'+taskUiT('question',language)+'</b> '+escapeHtml(question)+'</small>':'';
+    const appNote=taskType==='visit_app'?'<small class="empty-note">'+taskUiT('appDisclaimer',language)+'</small>':'';
+    return '<div class="listrow" style="align-items:flex-start"><div style="min-width:0;flex:1"><b>'+escapeHtml(title)+'</b><small class="tag">'+escapeHtml(taskTypeLabel(taskType,language))+'</small>'+(isRequired?'<small class="tag">'+taskUiT('requiredReferral',language)+'</small>':'')+'<small>'+escapeHtml(description)+'</small>'+questionBlock+actionLink+appNote+'<small class="tag">'+Number(t.reward_points)+' Points</small>'+(t.expires_at?'<small>'+taskUiT('expiry',language)+' '+new Date(t.expires_at).toLocaleString(appDateLocale())+'</small>':'')+screenshotInput+'</div><button class="btn btn-soft" data-task-key="'+escapeHtml(t.task_key)+'" data-task-type="'+escapeHtml(taskType)+'" data-task-question="'+escapeHtml(question)+'" data-task-description="'+escapeHtml(description)+'" onclick="completeTask(this,&quot;'+escapeHtml(t.task_key)+'&quot;)">'+taskProofT('submit')+'</button></div>';
   }).join('');
   await loadTaskSubmissions();
 }
@@ -2407,8 +2469,11 @@ function taskProofT(key){const lang=localStorage.getItem('appLanguage')||'ha';re
 async function completeTask(btn,taskKey){
   if(!currentUser){setMessage('dashboardMessage',taskProofT('login'));return;}
   const description=btn?.dataset?.taskDescription||taskProofT('defaultPrompt');
-  const needsTenWords=taskKey.startsWith('ka_duba_sabon_update_na_yau_');
-  const proof=prompt(description+'\n\n'+(needsTenWords?taskProofT('videoPrompt'):taskProofT('proofPrompt')));
+  const taskType=btn?.dataset?.taskType||'general';
+  const question=btn?.dataset?.taskQuestion||'';
+  const needsTenWords=taskType==='watch_video'||taskKey.startsWith('ka_duba_sabon_update_na_yau_');
+  const promptText=taskType==='question_answer'?'\n\n'+taskUiT('question')+' '+question+'\n\n'+taskUiT('answerPrompt'):(needsTenWords?taskProofT('videoPrompt'):taskProofT('proofPrompt'));
+  const proof=prompt(description+'\n\n'+promptText);
   if(proof===null)return;
   if(needsTenWords&&proof.trim().split(/\s+/).filter(Boolean).length<10){alert(taskProofT('videoTooShort'));return;}
   if(!needsTenWords&&proof.trim().length<10){alert(taskProofT('proofTooShort'));return;}
@@ -2587,27 +2652,56 @@ async function saveReferralQualificationTasks(event){
   finally{button.disabled=false;button.textContent=adminT('saveReferralTasks');}
 }
 
+function updateTaskTypeFields(){
+  const type=document.getElementById('newTaskType')?.value||'general';
+  const q=document.getElementById('newTaskQuestionField'),u=document.getElementById('newTaskUrlField');
+  if(q)q.hidden=type!=='question_answer';
+  if(u)u.hidden=!['watch_video','visit_website','visit_app'].includes(type);
+}
+const taskUiTranslations={
+ ha:{adminOnly:'Admin kawai zai iya ƙirƙirar Task.',general:'Task na gama-gari',question_answer:'Tambaya da Amsa',watch_video:'Kalli Bidiyo',visit_website:'Ziyarci Yanar Gizo',visit_app:'Ziyarci App',question:'Tambaya:',answerPrompt:'Amsarka (admin zai duba):',manualReview:'Admin zai duba hujja da hannu kafin bayar da Points.',requiredReferral:'Dole domin Referral Commission',expiry:'Wa’adi:',watchLink:'▶ Kalli Bidiyo',websiteLink:'↗ Ziyarci Yanar Gizo',appLink:'↗ Buɗe App',appDisclaimer:'Lura: wannan hanyar tana buɗe link ɗin app ne kawai. Ba ta tabbatar da cewa an girka ko an yi amfani da app ba; admin zai duba hujja da hannu.'},
+ en:{adminOnly:'Only an admin can create a task.',general:'General task',question_answer:'Question & answer',watch_video:'Watch video',visit_website:'Visit website',visit_app:'Visit app',question:'Question:',answerPrompt:'Your answer (admin will review):',manualReview:'An admin will manually review the proof before points are awarded.',requiredReferral:'Required for referral commission',expiry:'Expires:',watchLink:'▶ Watch video',websiteLink:'↗ Visit website',appLink:'↗ Open app',appDisclaimer:'Note: this only opens the app link. It cannot verify installation or app usage; an admin will review the submitted proof manually.'},
+ fr:{adminOnly:'Seul un administrateur peut créer une tâche.',general:'Tâche générale',question_answer:'Question et réponse',watch_video:'Regarder une vidéo',visit_website:'Visiter le site web',visit_app:'Visiter l’application',question:'Question :',answerPrompt:'Votre réponse (elle sera vérifiée par l’administrateur) :',manualReview:'Un administrateur vérifiera manuellement la preuve avant l’attribution des points.',requiredReferral:'Obligatoire pour la commission de parrainage',expiry:'Expire le :',watchLink:'▶ Regarder la vidéo',websiteLink:'↗ Visiter le site web',appLink:'↗ Ouvrir l’application',appDisclaimer:'Remarque : ce lien ouvre uniquement l’application. Il ne permet pas de vérifier son installation ou son utilisation ; un administrateur vérifiera manuellement la preuve envoyée.'},
+ ar:{adminOnly:'يمكن للمسؤول فقط إنشاء مهمة.',general:'مهمة عامة',question_answer:'سؤال وجواب',watch_video:'مشاهدة فيديو',visit_website:'زيارة موقع إلكتروني',visit_app:'زيارة تطبيق',question:'السؤال:',answerPrompt:'إجابتك (سيراجعها المسؤول):',manualReview:'سيراجع المسؤول الإثبات يدوياً قبل إضافة النقاط.',requiredReferral:'مطلوب للحصول على عمولة الإحالة',expiry:'ينتهي في:',watchLink:'▶ مشاهدة الفيديو',websiteLink:'↗ زيارة الموقع',appLink:'↗ فتح التطبيق',appDisclaimer:'ملاحظة: يفتح هذا الرابط صفحة التطبيق فقط. لا يمكنه التحقق من تثبيت التطبيق أو استخدامه؛ وسيراجع المسؤول الإثبات المرسل يدوياً.'}
+};
+function taskUiT(key,language=localStorage.getItem('appLanguage')||'ha'){
+ const dict=taskUiTranslations[language]||taskUiTranslations.ha;
+ return dict[key]||taskUiTranslations.ha[key]||key;
+}
+function taskTypeLabel(type,language=localStorage.getItem('appLanguage')||'ha'){
+ return taskUiT(type in taskUiTranslations.ha?type:'general',language);
+}
 async function createAdminTask(event){
   event.preventDefault();
   const title=document.getElementById('newTaskTitle').value.trim();
   const description=document.getElementById('newTaskDescription').value.trim();
   const reward=Number(document.getElementById('newTaskPoints').value);
   const expiryValue=document.getElementById('newTaskExpiry')?.value||'';
-  const expiresAt=expiryValue?new Date(expiryValue).toISOString():null;
+  const expiryDate=expiryValue?new Date(expiryValue):null;
+  const expiresAt=expiryDate?expiryDate.toISOString():null;
+  const taskType=document.getElementById('newTaskType')?.value||'general';
+  const question=document.getElementById('newTaskQuestion')?.value.trim()||'';
+  const actionUrl=document.getElementById('newTaskUrl')?.value.trim()||'';
   const button=document.getElementById('createTaskButton');
   if(!title||!description||!Number.isSafeInteger(reward)||reward<1||reward>1000000){setMessage('adminTaskMessage',adminT('taskCreateValidation'));return;}
+  if(expiryValue&&(!expiryDate||Number.isNaN(expiryDate.getTime())||expiryDate.getTime()<=Date.now())){setMessage('adminTaskMessage',({ha:'Lokacin ƙarewar task dole ya kasance a gaba.',en:'Task expiry must be a future date and time.',fr:'La date d’expiration doit être dans le futur.',ar:'يجب أن يكون وقت انتهاء المهمة في المستقبل.'})[localStorage.getItem('appLanguage')||'ha']);return;}
+  if(taskType==='question_answer'&&question.length<5){setMessage('adminTaskMessage',({ha:'Ka rubuta tambayar da za a amsa (aƙalla haruffa 5).',en:'Please enter a question of at least 5 characters.',fr:'Veuillez saisir une question de 5 caractères minimum.',ar:'يرجى إدخال سؤال لا يقل عن 5 أحرف.'})[localStorage.getItem('appLanguage')||'ha']);return;}
+  if(['watch_video','visit_website','visit_app'].includes(taskType)){
+    try{const parsed=new URL(actionUrl);if(parsed.protocol!=='https:')throw new Error('HTTPS only');}
+    catch(err){setMessage('adminTaskMessage',({ha:'Ka saka ingantaccen URL mai HTTPS.',en:'Enter a valid HTTPS URL.',fr:'Saisissez une URL HTTPS valide.',ar:'أدخل رابط HTTPS صالحاً.'})[localStorage.getItem('appLanguage')||'ha']);return;}
+  }
   button.disabled=true;button.textContent=adminT('taskCreateLoading');
   try{
     const {data:isAdmin,error:adminError}=await supabaseClient.rpc('is_app_admin');
     if(adminError)throw adminError;
-    if(!isAdmin)throw new Error('Admin kawai zai iya ƙirƙirar Task.');
+    if(!isAdmin)throw new Error(taskUiT('adminOnly'));
     const translations=collectTranslations('newTask','description');
-    const {error}=await supabaseClient.from('tasks').insert({task_key:makeTaskKey(title),title,description,translations,reward_points:reward,is_active:true,expires_at:expiresAt,created_by:currentUser.id});
+    translations._task={type:taskType,question:taskType==='question_answer'?question:null,approval_mode:'manual',proof_required:true};
+    const {error}=await supabaseClient.from('tasks').insert({task_key:makeTaskKey(title),title,description,translations,reward_points:reward,is_active:true,expires_at:expiresAt,action_url:actionUrl||null,created_by:currentUser.id});
     if(error)throw error;
-    document.getElementById('adminCreateTaskForm').reset();
+    document.getElementById('adminCreateTaskForm').reset();updateTaskTypeFields();
     setMessage('adminTaskMessage',adminT('taskCreateSuccess'));
-    await loadAdminTasks();
-    await loadAvailableTasks();
+    await loadAdminTasks();await loadAvailableTasks();
   }catch(err){setMessage('adminTaskMessage',adminT('taskCreateError')+' '+err.message);}
   finally{button.disabled=false;button.textContent=adminT('createTask');}
 }
@@ -2618,8 +2712,8 @@ function renderAdminTasks(force=false, languageOverride=null){
   if(!force && target.dataset.renderedLanguage===language) return;
   const rows=adminTaskRowsCache;
   target.dataset.renderedLanguage=language;
-  if(!rows.length){target.textContent=adminT('noPublishedTasks');return;}
-  target.innerHTML=rows.map(t=>`<div class="listrow" style="align-items:flex-start"><div style="min-width:0;flex:1"><b data-user-content>${escapeHtml(localizedContent(t,'title',language))}</b><small data-user-content>${escapeHtml(localizedContent(t,'description',language))}</small><small>${Number(t.reward_points)} ${adminT('taskPointsLabel')} • ${t.is_active?adminT('taskActive'):adminT('taskInactive')}</small><small>${t.expires_at?adminT('taskExpiryLabel')+' '+new Date(t.expires_at).toLocaleString(appDateLocale()):adminT('taskNoExpiry')}</small></div><button class="btn ${t.is_active?'btn-soft':'btn-green'}" onclick="toggleAdminTask('${escapeHtml(t.task_key)}',${!t.is_active})">${t.is_active?adminT('taskDeactivate'):adminT('taskActivate')}</button></div>`).join('');
+  if(!rows.length){target.textContent=adminT('noPublishedTasks',language);return;}
+  target.innerHTML=rows.map(t=>{const type=t.translations?._task?.type||'general';return '<div class="listrow" style="align-items:flex-start"><div style="min-width:0;flex:1"><b data-user-content>'+escapeHtml(localizedContent(t,'title',language))+'</b><small>'+escapeHtml(taskTypeLabel(type,language))+' • '+taskUiT('manualReview',language)+'</small><small data-user-content>'+escapeHtml(localizedContent(t,'description',language))+'</small><small>'+Number(t.reward_points)+' '+adminT('taskPointsLabel',language)+' • '+(t.is_active?adminT('taskActive',language):adminT('taskInactive',language))+'</small><small>'+(t.expires_at?adminT('taskExpiryLabel',language)+' '+new Date(t.expires_at).toLocaleString(appDateLocale()):adminT('taskNoExpiry',language))+'</small></div><button class="btn '+(t.is_active?'btn-soft':'btn-green')+'" onclick="toggleAdminTask(&quot;'+escapeHtml(t.task_key)+'&quot;,'+(!t.is_active)+')">'+(t.is_active?adminT('taskDeactivate',language):adminT('taskActivate',language))+'</button></div>';}).join('');
 }
 async function loadAdminTasks(){
   const target=document.getElementById('adminTasksList');if(!target)return;
