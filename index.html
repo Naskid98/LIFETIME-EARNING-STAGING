@@ -2188,16 +2188,32 @@ async function loadAdminTaskSubmissions() {
       submissionQuery = submissionQuery.or(clauses.join(','));
     }
   }
-  const { data: rows, error, count } = await submissionQuery
+  let queryResult = await submissionQuery
     .order('created_at', { ascending: false })
     .range(from, to);
 
-  if (error) {
-    target.textContent = adminT('tasksLoadError') + ' ' + error.message;
+  if (queryResult.error) {
+    target.textContent = adminT('tasksLoadError') + ' ' + queryResult.error.message;
     return;
   }
-  adminTaskSubmissionRows = rows || [];
-  adminTaskHistoryTotal = count || 0;
+
+  // Keep pagination on a valid page when review actions reduce the result count.
+  const totalRows = queryResult.count || 0;
+  const lastValidPage = Math.max(0, Math.ceil(totalRows / ADMIN_TASK_HISTORY_PAGE_SIZE) - 1);
+  if (adminTaskHistoryPage > lastValidPage) {
+    adminTaskHistoryPage = lastValidPage;
+    const adjustedFrom = adminTaskHistoryPage * ADMIN_TASK_HISTORY_PAGE_SIZE;
+    queryResult = await submissionQuery
+      .order('created_at', { ascending: false })
+      .range(adjustedFrom, adjustedFrom + ADMIN_TASK_HISTORY_PAGE_SIZE - 1);
+    if (queryResult.error) {
+      target.textContent = adminT('tasksLoadError') + ' ' + queryResult.error.message;
+      return;
+    }
+  }
+
+  adminTaskSubmissionRows = queryResult.data || [];
+  adminTaskHistoryTotal = queryResult.count || 0;
   adminTaskProofUrls = {};
   await Promise.all(adminTaskSubmissionRows.map(async row=>{
     const path=getTaskProofStoragePath(row.proof);
